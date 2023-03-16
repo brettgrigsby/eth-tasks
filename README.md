@@ -20,6 +20,8 @@ You will see a list of accounts with private keys. Copy the private key of one o
 
 Use the private key to import the account into Metamask, then add the network `http://localhost:8545` to Metamask with Chain ID: 31337.
 
+<img width="335" alt="Screen Shot 2023-03-15 at 7 55 37 PM" src="https://user-images.githubusercontent.com/8657755/225492015-94ef5ec3-ee65-4a45-abd8-c70b9048c8c0.png">
+
 ### Deploy the contract
 
 ```bash
