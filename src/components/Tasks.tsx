@@ -1,4 +1,5 @@
 import {
+  Flex,
   Box,
   Heading,
   TableContainer,
@@ -10,10 +11,12 @@ import {
   IconButton,
   ButtonGroup,
   Tooltip,
+  Checkbox,
 } from "@chakra-ui/react"
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons"
 import type { Task } from "../types"
 import { Contract } from "ethers"
+import { useState } from "react"
 
 type Props = {
   tasks: Task[]
@@ -26,6 +29,8 @@ function sortTasksByDueDate(a: Task, b: Task) {
 }
 
 const Tasks: React.FC<Props> = ({ tasks, contract, refetch }) => {
+  const [showCompleted, setShowCompleted] = useState(false)
+
   const handleMarkCompleted = async (id: number) => {
     const tx = await contract.completeTask(id)
     await tx.wait()
@@ -38,7 +43,9 @@ const Tasks: React.FC<Props> = ({ tasks, contract, refetch }) => {
     refetch()
   }
 
-  const filteredTasks = tasks.filter((task) => !!task.name)
+  const filteredTasks = tasks.filter(
+    (task) => !!task.name && (showCompleted ? true : !task.completed)
+  )
 
   if (filteredTasks.length === 0) {
     return (
@@ -51,7 +58,17 @@ const Tasks: React.FC<Props> = ({ tasks, contract, refetch }) => {
 
   return (
     <Box p={4}>
-      <Heading mb={4}>My Tasks</Heading>
+      <Flex justify="space-between">
+        <Heading mb={4}>My Tasks</Heading>
+        <Flex align="center">
+          <Text fontSize="sm">Show Completed</Text>
+          <Checkbox
+            isChecked={showCompleted}
+            onChange={() => setShowCompleted(!showCompleted)}
+            ml={2}
+          />
+        </Flex>
+      </Flex>
       <TableContainer>
         <Table variant="striped" colorScheme="gray">
           <Tbody>

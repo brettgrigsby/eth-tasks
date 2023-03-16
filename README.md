@@ -55,3 +55,9 @@ npm run start
 ```bash
 npx hardhat test
 ```
+
+## What's Lacking?
+
+- [ ] Tests for the frontend
+- [ ] Better error handling
+- [ ] Scope contract functions to address of caller

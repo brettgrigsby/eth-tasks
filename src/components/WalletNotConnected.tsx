@@ -1,5 +1,5 @@
 import { useConnect } from "wagmi"
-import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react"
+import { Button, Flex, Heading, Text } from "@chakra-ui/react"
 
 export default function WalletNotConnected() {
   const { connect, connectors } = useConnect()

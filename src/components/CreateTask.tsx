@@ -24,7 +24,7 @@ const CreateTask: React.FC<Props> = ({ contract, refetch }) => {
     const { name, description, dueDate } = formState
     if (!name || !description || !dueDate) return
 
-    const timestamp = new Date(dueDate).getTime()
+    const timestamp = new Date(dueDate + " UTC").getTime()
     const tx = await contract.createTask(name, description, timestamp)
 
     // should handle transaction not getting mined here
@@ -33,6 +33,9 @@ const CreateTask: React.FC<Props> = ({ contract, refetch }) => {
     setFormState({ name: "", description: "", dueDate: "" })
     refetch()
   }
+
+  const formStateIsValid =
+    formState.name && formState.description && formState.dueDate
 
   return (
     <Box p={4} borderRight="1px solid #36454f" height="100vh">
@@ -54,7 +57,12 @@ const CreateTask: React.FC<Props> = ({ contract, refetch }) => {
           onChange={handleChange("dueDate")}
         />
       </Stack>
-      <Button w="full" mt={4} onClick={handleCreateTask}>
+      <Button
+        w="full"
+        mt={4}
+        onClick={handleCreateTask}
+        isDisabled={!formStateIsValid}
+      >
         Create Task
       </Button>
     </Box>
