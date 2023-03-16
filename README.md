@@ -11,6 +11,7 @@ npm install
 ### Spin up the local blockchain
 
 ```bash
+npx hardhat
 npx hardhat node
 ```
 
