@@ -7,7 +7,7 @@ import ContractNotDeployed from "./ContractNotDeployed"
 import CreateTask from "./CreateTask"
 import { Flex, Box } from "@chakra-ui/react"
 
-const CONTRACT_ADDRESS = "0x5fbdb2315678afecb367f032d93f642f64180aa3"
+const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS
 
 export default function WalletConnected() {
   const [contractDeployed, setContractDeployed] = useState(true)
@@ -20,7 +20,7 @@ export default function WalletConnected() {
   })
 
   const checkContractDeployment = useCallback(async () => {
-    if (!signer?.provider) return
+    if (!signer?.provider || !CONTRACT_ADDRESS) return
 
     try {
       const contractCode = await signer?.provider?.getCode(CONTRACT_ADDRESS)

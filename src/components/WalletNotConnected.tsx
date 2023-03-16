@@ -15,7 +15,7 @@ export default function WalletNotConnected() {
   return (
     <Flex justify="center" align="center" flexDirection="column" height="100vh">
       <Heading>Welcome to Ethereum Task Manager</Heading>
-      <Text>Click the button below to connect your wallet.</Text>
+      <Text>Click the button below to connect your wallet</Text>
       <Button onClick={handleConnect} mt={4}>
         Connect Wallet
       </Button>
