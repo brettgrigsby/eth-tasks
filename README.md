@@ -2,7 +2,6 @@
 
 <img width="1038" alt="Screen Shot 2023-03-15 at 8 27 07 PM" src="https://user-images.githubusercontent.com/8657755/225494162-7de85637-9693-43f5-92ff-8f70bb24eb2b.png">
 
-
 ## Project Setup
 
 ### Install dependencies
@@ -64,3 +63,4 @@ npx hardhat test
 - [ ] Tests for the frontend
 - [ ] Better error handling
 - [ ] Scope contract functions to address of caller
+- [ ] Dates are 1 day off
