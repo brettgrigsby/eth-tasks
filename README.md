@@ -41,7 +41,7 @@ eth_sendTransaction
   Block #1:            0x10a0775985ccbc553665022ed45cdf3817c805e1c5447b3c190a1cd5ee986c91
 ```
 
-If this address differs from the existing value in the `.env` file, update the `.env` file with the new address.
+If this address differs from the existing value for `REACT_APP_CONTRACT_ADDRESS` in the `.env` file, update the value with the new address.
 
 ### Run the frontend
 
