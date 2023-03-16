@@ -1,107 +1,42 @@
-import logo from "./logo.svg"
-import "./App.css"
-import { ethers, providers, Contract } from "ethers"
-import TasksABI from "./BrettTasks.json"
-import { Web3ReactProvider, useWeb3React } from "@web3-react/core"
-import { injectedConnector } from "./web3"
+import { providers } from "ethers"
+import { InjectedConnector } from "wagmi/connectors/injected"
+import { hardhat } from "wagmi/chains"
+import { createClient, WagmiConfig, useAccount, useNetwork } from "wagmi"
+import WalletNotConnected from "./components/WalletNotConnected"
+import WalletConnected from "./components/WalletConnected"
+import SwitchNetwork from "./components/SwitchNetwork"
+import { ChakraProvider } from "@chakra-ui/react"
 
-const CONTRACT_ADDRESS = "0x5fbdb2315678afecb367f032d93f642f64180aa3"
+const ethProvider = new providers.JsonRpcProvider(
+  "http://127.0.0.1:8545",
+  providers.getNetwork(31337)
+)
+const connector = new InjectedConnector({ chains: [hardhat] })
 
-function getLibrary(provider: providers.ExternalProvider) {
-  return new ethers.providers.Web3Provider(provider)
-}
+const client = createClient({
+  autoConnect: true,
+  provider: ethProvider,
+  connectors: [connector],
+})
 
 function AppWrapper() {
   return (
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <App />
-    </Web3ReactProvider>
+    <ChakraProvider>
+      <WagmiConfig client={client}>
+        <App />
+      </WagmiConfig>
+    </ChakraProvider>
   )
 }
 
 function App() {
-  const { activate, active, library, chainId, account } = useWeb3React()
+  const { isConnected } = useAccount()
+  const { chain } = useNetwork()
 
-  const connect = async () => {
-    console.log("Connecting to the local Hardhat node...")
-    try {
-      await activate(injectedConnector)
-    } catch (error) {
-      console.log("Error connecting to the local Hardhat node:", error)
-    }
-  }
+  if (!isConnected) return <WalletNotConnected />
+  if (chain?.id !== 31337) return <SwitchNetwork />
 
-  const createTask = async () => {
-    if (!active) {
-      console.log("Please connect to the local Hardhat node first")
-      return
-    }
-    const contract = new Contract(
-      CONTRACT_ADDRESS,
-      TasksABI.abi,
-      library.getSigner()
-    )
-    if (!contract) {
-      console.log("Could not find contract")
-      return
-    }
-    const name = "Sample Task"
-    const description = "This is a sample task"
-    const dueDate = Math.floor(new Date().getTime() / 1000) + 86400 // Current timestamp + 1 day
-
-    const tx = await contract.createTask(name, description, dueDate)
-    await tx.wait()
-    console.log("Task created!")
-  }
-
-  const getTasks = async () => {
-    if (!active) {
-      console.log("Please connect to the local Hardhat node first")
-      return
-    }
-    const contract = new Contract(
-      CONTRACT_ADDRESS,
-      TasksABI.abi,
-      library.getSigner()
-    )
-    if (!contract) {
-      console.log("Could not find contract")
-      return
-    }
-
-    console.log({ contract, functions: contract.functions })
-    const tasks = await contract.getTasks()
-    console.log({ tasks })
-  }
-
-  const getTask = async () => {
-    if (!active) {
-      console.log("Please connect to the local Hardhat node first")
-      return
-    }
-    const contract = new Contract(
-      CONTRACT_ADDRESS,
-      TasksABI.abi,
-      library.getSigner()
-    )
-    if (!contract) {
-      console.log("Could not find contract")
-      return
-    }
-    const task = await contract.getTask(1)
-    console.log({ task })
-  }
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <button onClick={connect}>Connect</button>
-        <button onClick={createTask}>Create Task</button>
-        <button onClick={getTasks}>Get Tasks</button>
-        <button onClick={getTask}>Get Task</button>
-      </header>
-    </div>
-  )
+  return <WalletConnected />
 }
 
 export default AppWrapper

@@ -4,9 +4,9 @@ async function main() {
   const [deployer] = await ethers.getSigners()
   console.log("Deploying contracts with the account:", deployer.address)
 
-  const BrettTasks = await ethers.getContractFactory("BrettTasks")
-  const brettTasks = await BrettTasks.deploy()
-  console.log("BrettTasks contract deployed to:", brettTasks.address)
+  const Tasks = await ethers.getContractFactory("Tasks")
+  const tasks = await Tasks.deploy()
+  console.log("Tasks contract deployed to:", tasks.address)
 }
 
 main()

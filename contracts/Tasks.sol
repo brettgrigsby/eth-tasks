@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-
-contract BrettTasks {
+contract Tasks {
     struct Task {
         uint256 id;
         string name;
@@ -32,7 +30,6 @@ contract BrettTasks {
     }
 
     function deleteTask(uint256 id) external {
-        require(tasks[id].completed, "Cannot delete an incomplete task");
         delete tasks[id];
         emit TaskDeleted(id);
     }
@@ -43,14 +40,11 @@ contract BrettTasks {
 
     function getTasks() external view returns (Task[] memory) {
         uint256 taskCount = nextTaskId;
-        console.log("taskCount: %s", taskCount);
         Task[] memory taskList = new Task[](taskCount);
 
         for (uint256 i = 0; i < taskCount; i++) {
             taskList[i] = tasks[i];
         }
-
-        console.log("taskList length: %s", taskList.length);
 
         return taskList;
     }

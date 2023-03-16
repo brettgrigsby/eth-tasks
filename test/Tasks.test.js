@@ -3,11 +3,11 @@
 const { expect } = require("chai")
 const { ethers } = require("hardhat")
 
-describe("BrettTasks", function () {
+describe("Tasks", function () {
   let Tasks, tasks, owner, addr1, addr2
 
   beforeEach(async () => {
-    Tasks = await ethers.getContractFactory("BrettTasks")
+    Tasks = await ethers.getContractFactory("Tasks")
     tasks = await Tasks.deploy()
     ;[owner, addr1, addr2] = await ethers.getSigners()
   })
@@ -20,7 +20,7 @@ describe("BrettTasks", function () {
     const task = await tasks.getTask(0)
     expect(task.name).to.equal("Test Task")
     expect(task.description).to.equal("Test Description")
-    expect(task.dueDate).to.equal(1629340800)
+    expect(task.dueDate.toNumber()).to.equal(1629340800)
   })
 
   it("Should complete a task", async function () {
@@ -41,7 +41,7 @@ describe("BrettTasks", function () {
     await tasks.connect(owner).deleteTask(0)
 
     const task = await tasks.getTask(0)
-    expect(task.id).to.equal(0)
+    expect(task.id.toNumber()).to.equal(0)
     expect(task.name).to.equal("")
     expect(task.description).to.equal("")
   })
@@ -50,7 +50,7 @@ describe("BrettTasks", function () {
     await tasks.connect(owner).createTask("Task 1", "Description 1", 1629340800)
     await tasks.connect(owner).createTask("Task 2", "Description 2", 1629340800)
 
-    const taskList = await tasks.connect(owner).getTasks()
+    const taskList = await tasks.connect(addr1).getTasks()
     expect(taskList.length).to.equal(2)
     expect(taskList[0].name).to.equal("Task 1")
     expect(taskList[1].name).to.equal("Task 2")
